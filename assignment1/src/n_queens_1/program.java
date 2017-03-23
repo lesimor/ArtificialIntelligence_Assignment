@@ -24,6 +24,7 @@ public class program {
 		col2.add(true);
 		map.add(col2);
 		
+		
 		ArrayList <Boolean> col3 = new ArrayList<Boolean>();
 		col3.add(true);
 		col3.add(false);
