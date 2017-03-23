@@ -7,9 +7,25 @@ public class State {
 	
 	public State(ArrayList <ArrayList<Boolean>> _map, int _index_x, int _index_y){
 		this.map = new ArrayList <ArrayList<Boolean>>();
-		copyMap(_map);	// 위치정보 지도 copy
+		this.map = copyMap(_map);	// 위치정보 지도 copy
 		this.index_x = _index_x;
 		this.index_y = _index_y;
+		System.out.println("------MAP(초기화)--------");
+		for(int i = 0 ; i < _map.get(0).size() ; i++){
+			for(int j = 0 ; j < _map.size() ; j++){
+				if(_map.get(j).get(i) == true){
+					System.out.print("퀸 ");
+				} else {
+					System.out.print("ㅁ ");
+				}
+			}
+			System.out.println("");
+		}
+		if(this.goalCheck()){
+			System.out.println("Good ^^(마지막기준)");
+		} else {
+			System.out.println("Bad ㅠ_ㅠ(마지막기준)");
+		}
 	}
 	
 	public boolean goalCheck(){
@@ -49,18 +65,21 @@ public class State {
 	}
 	
 	// 인자로 받은 map 변수를 해당 state의 map에 카피하는 메소드.
-	private void copyMap(ArrayList <ArrayList<Boolean>> _map){
+	public ArrayList <ArrayList<Boolean>> copyMap(ArrayList <ArrayList<Boolean>> _map){
+		ArrayList <ArrayList<Boolean>> returnMap = new ArrayList <ArrayList<Boolean>>();
 		int x_size  = _map.size();
-		System.out.println("가로의 길이는 "+x_size+"입니다..");
+//		System.out.println("가로의 길이는 "+x_size+"입니다..");
 		int y_size = _map.get(0).size();
-		System.out.println("세로의 길이는 "+y_size+"입니다..");
+//		System.out.println("세로의 길이는 "+y_size+"입니다..");
 		for(int i = 0 ; i < x_size; i++){
-			this.map.add(new ArrayList<Boolean>());
+			returnMap.add(new ArrayList<Boolean>());
 			
 			for(int j = 0 ; j < y_size ; j++){
-				System.out.println("i값은 " +i + "y값은 " + j);
-				this.map.get(i).add(_map.get(i).get(j)); 
+//				System.out.println("i값은 " +i + "y값은 " + j);
+				returnMap.get(i).add(_map.get(i).get(j)); 
 			}
 		}
+		
+		return returnMap;
 	}
 }
