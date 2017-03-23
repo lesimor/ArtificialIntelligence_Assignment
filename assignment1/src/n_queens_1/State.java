@@ -1,65 +1,64 @@
 package n_queens_1;
 import java.util.ArrayList;
-
 public class State {
-	public ArrayList <ArrayList<Boolean>> map;	//ÄıÀÇ ¹èÄ¡ »óÅÂ.
-	public int index_x;	// »õ·Î ³õÀÎ ÄıÀÇ °¡·Î À§Ä¡.
-	public int index_y;   // »õ·Î ³õÀÎ ÄıÀÇ ¼¼·Î À§Ä¡.
+	public ArrayList <ArrayList<Boolean>> map;	//í€¸ì˜ ë°°ì¹˜ ìƒíƒœ.
+	public int index_x;	// ìƒˆë¡œ ë†“ì¸ í€¸ì˜ ê°€ë¡œ ìœ„ì¹˜.
+	public int index_y;   // ìƒˆë¡œ ë†“ì¸ í€¸ì˜ ì„¸ë¡œ ìœ„ì¹˜.
 	
 	public State(ArrayList <ArrayList<Boolean>> _map, int _index_x, int _index_y){
 		this.map = new ArrayList <ArrayList<Boolean>>();
-		copyMap(_map);	// À§Ä¡Á¤º¸ Áöµµ copy
+		copyMap(_map);	// ìœ„ì¹˜ì •ë³´ ì§€ë„ copy
 		this.index_x = _index_x;
 		this.index_y = _index_y;
 	}
 	
 	public boolean goalCheck(){
-		// »õ·Î ³õÀÎ ÄıÀÇ À§Ä¡¿¡¼­¸¸ °Ë»çÇÏ¸é µÈ´Ù!
-		// Ã¹¹øÂ° colºÎÅÍ Â÷·Ê·Î °Ë»ç
+		// ìƒˆë¡œ ë†“ì¸ í€¸ì˜ ìœ„ì¹˜ì—ì„œë§Œ ê²€ì‚¬í•˜ë©´ ëœë‹¤!
+		// ì²«ë²ˆì§¸ colë¶€í„° ì°¨ë¡€ë¡œ ê²€ì‚¬
 		for(int i = 0 ; i < this.map.size() ; i++){
-			// i°ªÀÌ ³ªÀÇ xÀÎµ¦½ºº¸´Ù °°°Å³ª Å©¸é break;
+			// iê°’ì´ ë‚˜ì˜ xì¸ë±ìŠ¤ë³´ë‹¤ ê°™ê±°ë‚˜ í¬ë©´ break;
 			if(i >= this.index_x) break;
 			
-			// °Ë»çÇÒ À§Ä¡ -> ÀÎµ¦½º Â÷ÀÌÀÇ Àı´ë°ª
+			// ê²€ì‚¬í•  ìœ„ì¹˜ -> ì¸ë±ìŠ¤ ì°¨ì´ì˜ ì ˆëŒ€ê°’
 			int offset = Math.abs(this.index_x - i);
 			
-			// °Ë»çÇÏ°íÀÚ ÇÏ´Â »óÀ§ À§Ä¡
+			// ê²€ì‚¬í•˜ê³ ì í•˜ëŠ” ìƒìœ„ ìœ„ì¹˜
 			int check_upper_index_y = this.index_y - offset;
 			
-			// ¹üÀ§¸¦ ³Ñ¾î°¡´ÂÁö °Ë»ç & ÇØ´ç À§Ä¡¿¡ ÄıÀÌ ÀÖ´ÂÁö °Ë»ç.
+			// ë²”ìœ„ë¥¼ ë„˜ì–´ê°€ëŠ”ì§€ ê²€ì‚¬ & í•´ë‹¹ ìœ„ì¹˜ì— í€¸ì´ ìˆëŠ”ì§€ ê²€ì‚¬.
 			if((check_upper_index_y >= 0 && check_upper_index_y < map.get(i).size()) && map.get(i).get(check_upper_index_y) == true){
-				// ¹üÀ§ ¾È¿¡ ÀÖ´Ù¸é ÇØ´ç À§Ä¡¿¡ ÄıÀÌ ÀÖ´ÂÁö °Ë»ç
-				// ÄıÀÌ ÀÖÀ¸¸é ¾ÈµÈ´Ù.
+				// ë²”ìœ„ ì•ˆì— ìˆë‹¤ë©´ í•´ë‹¹ ìœ„ì¹˜ì— í€¸ì´ ìˆëŠ”ì§€ ê²€ì‚¬
+				// í€¸ì´ ìˆìœ¼ë©´ ì•ˆëœë‹¤.
 				return false;
 			}
-			// °Ë»çÇÏ°íÀÚ ÇÏ´Â ÁßÀ§ À§Ä¡
+			// ê²€ì‚¬í•˜ê³ ì í•˜ëŠ” ì¤‘ìœ„ ìœ„ì¹˜
 			int check_middle_index_y = this.index_y;
 			if(map.get(i).get(check_middle_index_y) == true){
 				return false;
 			}
 			
-			// °Ë»çÇÏ°íÀÚ ÇÏ´Â ÇÏÀ§ À§Ä¡
+			// ê²€ì‚¬í•˜ê³ ì í•˜ëŠ” í•˜ìœ„ ìœ„ì¹˜
 			int check_below_index_y = this.index_y + offset;
 			if((check_below_index_y >= 0 && check_below_index_y < map.get(i).size()) && map.get(i).get(check_below_index_y) == true){
-				// ¹üÀ§ ¾È¿¡ ÀÖ´Ù¸é ÇØ´ç À§Ä¡¿¡ ÄıÀÌ ÀÖ´ÂÁö °Ë»ç
-				// ÄıÀÌ ÀÖÀ¸¸é ¾ÈµÈ´Ù.
+				// ë²”ìœ„ ì•ˆì— ìˆë‹¤ë©´ í•´ë‹¹ ìœ„ì¹˜ì— í€¸ì´ ìˆëŠ”ì§€ ê²€ì‚¬
+				// í€¸ì´ ìˆìœ¼ë©´ ì•ˆëœë‹¤.
 				return false;
 			}
 		}
 		return true;
 	}
 	
-	// ÀÎÀÚ·Î ¹ŞÀº map º¯¼ö¸¦ ÇØ´ç stateÀÇ map¿¡ Ä«ÇÇÇÏ´Â ¸Ş¼Òµå.
+	// ì¸ìë¡œ ë°›ì€ map ë³€ìˆ˜ë¥¼ í•´ë‹¹ stateì˜ mapì— ì¹´í”¼í•˜ëŠ” ë©”ì†Œë“œ.
 	private void copyMap(ArrayList <ArrayList<Boolean>> _map){
 		int x_size  = _map.size();
-		System.out.println("°¡·ÎÀÇ ±æÀÌ´Â "+x_size+"ÀÔ´Ï´Ù..");
+		System.out.println("ê°€ë¡œì˜ ê¸¸ì´ëŠ” "+x_size+"ì…ë‹ˆë‹¤..");
 		int y_size = _map.get(0).size();
-		System.out.println("¼¼·ÎÀÇ ±æÀÌ´Â "+y_size+"ÀÔ´Ï´Ù..");
+		System.out.println("ì„¸ë¡œì˜ ê¸¸ì´ëŠ” "+y_size+"ì…ë‹ˆë‹¤..");
 		for(int i = 0 ; i < x_size; i++){
 			this.map.add(new ArrayList<Boolean>());
 			
 			for(int j = 0 ; j < y_size ; j++){
-				System.out.println("i°ªÀº " +i + "y°ªÀº " + j);
+				System.out.println("iê°’ì€ " +i + "yê°’ì€ " + j);
 				this.map.get(i).add(_map.get(i).get(j)); 
 			}
 		}
