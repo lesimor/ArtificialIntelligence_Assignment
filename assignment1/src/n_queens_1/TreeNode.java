@@ -63,6 +63,18 @@ public class TreeNode {
 		System.out.println("위치: " + this.state.index_x + this.state.index_y);
 	}
 	
+	public void showQueenPosition(){
+		int size_x = this.state.map.size();
+		int size_y = this.state.map.get(0).size();
+		for(int i = 0 ; i < size_x ; i++){
+			for(int j = 0 ; j < size_y ; j++){
+				if(this.state.map.get(i).get(j)){
+					System.out.print(j+" ");
+				}
+			}
+		}
+	}
+	
 	//트리를 initializing하는 클래스 메소드.
 	static TreeNode generateTree(int size){
 		// 지도 초기화.
