@@ -38,6 +38,31 @@ public class TreeNode {
 			}	
 		}
 	}
+	
+	public boolean isLeafNode(){
+		if(this.state.map.size() - 1 == this.state.index_x){
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	public void showStatus(){
+		System.out.println("------노드 초기화--------");
+		System.out.println("Depth(index_x):" + this.state.index_x);
+		for(int i = 0 ; i < this.state.map.get(0).size() ; i++){
+			for(int j = 0 ; j < this.state.map.size() ; j++){
+				if(this.state.map.get(j).get(i) == true){
+					System.out.print("퀸 ");
+				} else {
+					System.out.print("ㅁ ");
+				}
+			}
+			System.out.println("");
+		}
+		System.out.println("위치: " + this.state.index_x + this.state.index_y);
+	}
+	
 	//트리를 initializing하는 클래스 메소드.
 	static TreeNode generateTree(int size){
 		// 지도 초기화.

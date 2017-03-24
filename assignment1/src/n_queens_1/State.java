@@ -10,22 +10,6 @@ public class State {
 		this.map = copyMap(_map);	// 위치정보 지도 copy
 		this.index_x = _index_x;
 		this.index_y = _index_y;
-		System.out.println("------MAP(초기화)--------");
-		for(int i = 0 ; i < _map.get(0).size() ; i++){
-			for(int j = 0 ; j < _map.size() ; j++){
-				if(_map.get(j).get(i) == true){
-					System.out.print("퀸 ");
-				} else {
-					System.out.print("ㅁ ");
-				}
-			}
-			System.out.println("");
-		}
-		if(this.goalCheck()){
-			System.out.println("Good ^^(마지막기준)");
-		} else {
-			System.out.println("Bad ㅠ_ㅠ(마지막기준)");
-		}
 	}
 	
 	public boolean goalCheck(){
