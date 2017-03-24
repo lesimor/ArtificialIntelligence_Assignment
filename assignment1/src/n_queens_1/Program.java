@@ -14,7 +14,7 @@ public class Program {
 		// TODO Auto-generated method stub
 		// 트리 expanding
 		// expanding한 트리의 루트노드를 리턴받는다.
-		TreeNode root = TreeNode.generateTree(7);
+		TreeNode root = TreeNode.generateTree(4);
 		
 		// DFS탐색을 시작.
 		System.out.println(">DFS");
@@ -89,6 +89,50 @@ public class Program {
 		// 시간측정 끝.
 		stopTime = System.currentTimeMillis();
 		if(BFS_solution_found == false) System.out.println("No solution");
+		collapsedTime = (stopTime - startTime);
+		System.out.println("Time: " + collapsedTime + "ms");
+		
+		// DFS탐색을 시작.
+		System.out.println(">DFIS");
+		
+		boolean DFIS_solution_found = false;
+		
+		// 시간측정 시작.
+		startTime = System.currentTimeMillis();
+		for(int level = 0 ; level < root.state.map.size(); level++){
+			Stack DFIS_fringes = new Stack();
+			DFIS_fringes.push(root);
+			DFIS_solution_found = false;
+			while(!DFIS_fringes.empty()){
+				TreeNode pop_node = (TreeNode)DFIS_fringes.pop();
+				// 빠져나온 노드의 자식노드가 있으면 스택에 push
+				if(pop_node.children.size() != 0){
+					int size = pop_node.children.size();
+					for(int i = 0 ; i < size ; i++){
+						// child노드의 goalcheck통과한 것들만 스택에 추가.
+						TreeNode expanding_node = pop_node.children.get(i); 
+						if(expanding_node.state.goalCheck() && expanding_node.state.index_x <= level){
+							DFIS_fringes.push(pop_node.children.get(i));
+							// 해당 노드가 최하위 노드이면 솔루션 탐색 성공
+							if(expanding_node.isLeafNode()){
+								System.out.print("Location : ");
+								expanding_node.showQueenPosition();
+								System.out.println("");
+								DFIS_solution_found = true;
+								break;
+							}
+						}
+						
+					}
+				}
+				if(DFIS_solution_found) break;
+			}
+			if(DFIS_solution_found) break;
+		}
+		
+		// 시간측정 끝.
+		stopTime = System.currentTimeMillis();
+		if(DFIS_solution_found == false) System.out.println("No solution");
 		collapsedTime = (stopTime - startTime);
 		System.out.println("Time: " + collapsedTime + "ms");
 	}
