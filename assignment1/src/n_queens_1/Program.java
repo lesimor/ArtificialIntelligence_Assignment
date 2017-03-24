@@ -2,6 +2,10 @@ package n_queens_1;
 
 import java.util.Scanner;
 import java.util.Stack;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
@@ -10,10 +14,32 @@ import n_queens_1.*;
 
 public class Program {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws FileNotFoundException {
+		// 인자로 받을 숫자.
+		int map_size;
+		// 예외처리 
+		try{
+			map_size = Integer.parseInt(args[0]);
+	    }catch(NumberFormatException e){
+	    	map_size = 5;
+	    }
+		
+
+		// 두번째 인자로 받은 출력파일 절대경로
+		String resultFilePath = args[1];
+		
+		// 파일 설정.
+		File file = new File(resultFilePath+"/result"+map_size+".txt");
+		PrintStream printStream = new PrintStream(new FileOutputStream(file));
+		
+		// standard out과 err을 file로 변경
+		System.setOut(printStream);
+		System.setErr(printStream);
+
+		
 		// 트리 expanding
 		// expanding한 트리의 루트노드를 리턴받는다.
-		TreeNode root = TreeNode.generateTree(5);
+		TreeNode root = TreeNode.generateTree(map_size);
 		
 		// DFS탐색을 시작.
 		System.out.println(">DFS");
@@ -82,7 +108,7 @@ public class Program {
 		
 		// 경과시간 출력.
 		System.out.println("Time: " + collapsedTime + "ms");
-		
+		System.out.println("");
 		///////////////////////////////////////////////////////
 		
 		// BFS탐색 시작
@@ -148,7 +174,7 @@ public class Program {
 
 		// 경과시간 출력.
 		System.out.println("Time: " + collapsedTime + "ms");
-		
+		System.out.println("");
 		///////////////////////////////////////////////////////
 		
 		// DFIS탐색을 시작.

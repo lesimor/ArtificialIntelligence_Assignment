@@ -1,0 +1,11 @@
+>DFS
+No solution
+Time: 0ms
+
+>BFS
+No solution
+Time: 0ms
+
+>DFIS
+No solution
+Time: 0ms
