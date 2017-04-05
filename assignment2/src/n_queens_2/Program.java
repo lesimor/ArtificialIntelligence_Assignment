@@ -1,5 +1,7 @@
 package n_queens_2;
 
+import java.util.ArrayList;
+
 public class Program {
 
 	public static void main(String[] args) {
@@ -7,13 +9,51 @@ public class Program {
 		State singletonState = State.getInstance();
 		singletonState.print();
 		
-		singletonState.setSize(7);
+		int board_size = 10;
+		
+		singletonState.setSize(board_size);
 		
 		singletonState.showBoard();
 		
 		System.out.println("---------");
-		while(singletonState.getHeuristicIndexSum() != 0) {
-			singletonState.setSize(5);
+		int target_col = 0;
+		int current_queen_row, optimal_row;
+		
+		// 보드의 스냅샷 비교를 위한 변수.
+		ArrayList<Integer> old_snapshot = new ArrayList<Integer>();
+		ArrayList<Integer> new_snapshot = new ArrayList<Integer>();
+		System.out.println(new_snapshot.size());
+		while(true) {
+			current_queen_row = singletonState.getQueenRow(target_col);
+			optimal_row = singletonState.moveQueenByLocalSearch(target_col);
+			
+			// 만약 각 열마다 퀸을 이동하는데 움직일 곳이 없으면 local_optimal
+			
+			// 휴리스틱 총합이 0이면 빠져나온다.
+			if(singletonState.getHeuristicIndexSum() == 0) break;
+			
+			new_snapshot.add(optimal_row);
+			
+			target_col += 1;
+			// 탐색하고자 하는 열이 보드사이즈를 넘어가면 다시 0으로 만들어줌.
+			// 스냅샷을 비교.
+			if(target_col == board_size){
+				// 스냅샷을 비교해서 같으면 local_optimal이므로 다시 랜덤 배치한다.
+				if(equalArrayLists(old_snapshot, new_snapshot)){
+					singletonState.setSize(board_size);
+				} 
+				
+				// new_snapshot -> old_snapshot으로 복사.
+				copyArrayList(new_snapshot, old_snapshot);
+				
+				// new_snapshot 초기화.
+				new_snapshot.clear();
+				
+				// target_col을 다시 0으로 내린다.
+				target_col = 0;
+			}
+			
+			
 		}
 		
 //		singletonState.moveQueen(2, 1);
@@ -23,5 +63,29 @@ public class Program {
 		System.out.println("(0,0)에서의 휴리스틱 인덱스는 " + singletonState.getHeuristicIndexPerColumn(0 ,0));
 		System.out.println("휴리스틱 인덱스 총합은 " + singletonState.getHeuristicIndexSum());
 	}
+	
+	public static  boolean equalArrayLists(ArrayList<Integer> a, ArrayList<Integer> b){     
+	    // Check for sizes and nulls
+	    if ((a.size() != b.size()) || (a == null && b!= null) || (a != null && b== null)){
+	        return false;
+	    }
 
+	    if (a == null && b == null) return true;
+	    
+	    for (int i = 0 ; i < a.size(); i++){
+	    	if (a.get(i) != b.get(i)){
+	    		return false;
+	    	}
+	    }
+	    
+	    return true;
+	}
+	
+	public static void copyArrayList(ArrayList<Integer> source, ArrayList<Integer> dest){
+		dest.clear();	    
+	    for (int i = 0 ; i < source.size(); i++){
+	    	dest.add(source.get(i));
+	    }
+
+	}
 }

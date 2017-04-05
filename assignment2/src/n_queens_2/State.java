@@ -1,6 +1,7 @@
 package n_queens_2;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Random;
 
 // State를 판단하는 건 체스판 전체를 토대로 이루어지기 때문에 인스턴스는 하나만 있어도 된다.
@@ -113,9 +114,10 @@ public class State {
 		return heuristic_index;
 	}
 	
-	// 보드 위에 있는 모든 퀸의 휴리스틱 인덱스를 다 합친 값
+	// 인자로 들어온 행값과 열값으로 퀸을 이동시킨 후 보드 위에 잇는 모든 퀸의 휴리스틱 인덱스를 다 합친 
 	// 이게 0이면 gaol에 도달한 것.
 	public int getHeuristicIndexSum(){
+		
 		int queen_col, queen_row;
 		int heuristic_sum = 0;
 		for(queen_col = 0; queen_col < board.size(); queen_col++){
@@ -125,7 +127,6 @@ public class State {
 		return heuristic_sum;
 	}
 	
-	// 매개변수로 들어온 열(col)의 퀸을 매개변수로 들어온 행(row)의 위치로 이동.
 	public void moveQueen(int col, int row){
 		// 해당 열의 현재 퀸 위치.
 		int current_queen_row = board.get(col).indexOf(true);
@@ -138,6 +139,33 @@ public class State {
 		
 		// 인자로 들어온 row 위치에 퀸을 이동
 		current_col.set(row, true);
+	}
+	
+	// 매개변수로 들어온 열(col)의 퀸을 매개변수로 들어온 행(row)의 위치로 이동.
+	// 휴리스틱 총합이 가장 낮아지는 row로 이동.
+	public int moveQueenByLocalSearch(int col){
+		// 각 row별 휴리스틱 총합값.
+		ArrayList <Integer> heuristic_per_row = new ArrayList<Integer>();
+		
+		for(int i = 0 ; i < board.size(); i++){
+			moveQueen(col, i);
+			heuristic_per_row.add(getHeuristicIndexSum());
+		}
+		
+		// 휴리스틱 값이 가장 최소가 되는 인덱스 탐색.
+		int minHeuristicRow = heuristic_per_row.indexOf(Collections.min(heuristic_per_row));
+		
+		// 해당 위치로 퀸을 이동.
+		moveQueen(col, minHeuristicRow);
+		
+		// 이동한 row를 리턴
+		// local optimal에 빠졌는지 체크하기 위한 값으로 사용.
+		return minHeuristicRow;
+	}
+	
+	// 인자로 들어온 열값에 위치한 퀸의 row값을 리턴
+	public int getQueenRow(int col){
+		return board.get(col).indexOf(true);
 	}
 	
 	public void print(){
