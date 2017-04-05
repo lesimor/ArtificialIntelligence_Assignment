@@ -71,7 +71,75 @@ public class State {
 				System.out.println("");
 		}
 	}
-
+	
+	// 각 열의 퀸 위치에 따라 해당 퀸의 휴리스틱 인덱스를 계산.
+	// 휴리스틱 인덱스 -> 충돌하는 다른 열의 퀸 갯수.
+	public int getHeuristicIndexPerColumn(int index_x, int index_y){
+		// 휴리스틱 값 0으로 초기화.
+		heuristic_index = 0;
+		
+		// 첫번째 col부터 차례로 검사
+		for(int i = 0 ; i < this.board.size() ; i++){
+			// 검사하고자하는 열이 매개변수로 들어온 검사 대상 퀸의 열과 같으면 넘긴다.
+			if(i == index_x) continue;
+			
+			// 검사할 위치 -> 인덱스 차이의 절대값
+			int offset = Math.abs(index_x - i);
+			
+			// 검사하고자 하는 상위 위치
+			int check_upper_index_y = index_y - offset;
+			
+			// 범위를 넘어가는지 검사 & 해당 위치에 퀸이 있는지 검사.
+			if((check_upper_index_y >= 0 && check_upper_index_y < board.get(i).size()) && board.get(i).get(check_upper_index_y) == true){
+				// 더이상 볼 필요 없으므로 다음 열로 넘어간다.
+				// 한 열당 퀸은 하나이기 때문.
+				this.heuristic_index += 1;
+				continue;
+			}
+			// 검사하고자 하는 중위 위치
+			int check_middle_index_y = index_y;
+			if(board.get(i).get(check_middle_index_y) == true){
+				heuristic_index += 1;
+				continue;
+			}
+			
+			// 검사하고자 하는 하위 위치
+			int check_below_index_y = index_y + offset;
+			if((check_below_index_y >= 0 && check_below_index_y < board.get(i).size()) && board.get(i).get(check_below_index_y) == true){
+				heuristic_index += 1;
+				continue;
+			}
+		}
+		return heuristic_index;
+	}
+	
+	// 보드 위에 있는 모든 퀸의 휴리스틱 인덱스를 다 합친 값
+	// 이게 0이면 gaol에 도달한 것.
+	public int getHeuristicIndexSum(){
+		int queen_col, queen_row;
+		int heuristic_sum = 0;
+		for(queen_col = 0; queen_col < board.size(); queen_col++){
+			queen_row = board.get(queen_col).indexOf(true);
+			heuristic_sum += getHeuristicIndexPerColumn(queen_col, queen_row);
+		}
+		return heuristic_sum;
+	}
+	
+	// 매개변수로 들어온 열(col)의 퀸을 매개변수로 들어온 행(row)의 위치로 이동.
+	public void moveQueen(int col, int row){
+		// 해당 열의 현재 퀸 위치.
+		int current_queen_row = board.get(col).indexOf(true);
+		
+		// 현재 열
+		ArrayList <Boolean> current_col = board.get(col);
+		
+		// 현재 퀸 위치를 false로 공백처리하고.
+		current_col.set(current_queen_row, false);
+		
+		// 인자로 들어온 row 위치에 퀸을 이동
+		current_col.set(row, true);
+	}
+	
 	public void print(){
 		System.out.println("This is print method in State instance");
 		System.out.println("instance hash code -> " + instance.hashCode());
