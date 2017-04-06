@@ -1,6 +1,7 @@
 package n_queens_2;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class Program {
 
@@ -9,7 +10,7 @@ public class Program {
 		State singletonState = State.getInstance();
 		singletonState.print();
 		
-		int board_size = 10;
+		int board_size = 90;
 		
 		singletonState.setSize(board_size);
 		
@@ -40,7 +41,14 @@ public class Program {
 			if(target_col == board_size){
 				// 스냅샷을 비교해서 같으면 local_optimal이므로 다시 랜덤 배치한다.
 				if(equalArrayLists(old_snapshot, new_snapshot)){
-					singletonState.setSize(board_size);
+					// 랜덤 객체 생성 -> 난수 생성을 위함.
+					Random rand = new Random();
+					
+					// 0 ~ size -1 까지의 난수를 생성.
+					int rand_num = rand.nextInt(board_size);
+					
+					singletonState.moveQueenToSecondOptimal(rand_num);
+					
 				} 
 				
 				// new_snapshot -> old_snapshot으로 복사.
@@ -60,7 +68,6 @@ public class Program {
 		
 		singletonState.showBoard();
 		
-		System.out.println("(0,0)에서의 휴리스틱 인덱스는 " + singletonState.getHeuristicIndexPerColumn(0 ,0));
 		System.out.println("휴리스틱 인덱스 총합은 " + singletonState.getHeuristicIndexSum());
 	}
 	

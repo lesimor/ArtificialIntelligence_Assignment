@@ -168,6 +168,32 @@ public class State {
 		return board.get(col).indexOf(true);
 	}
 	
+	// 특정 열에서 최선의 값이 아닌 차선의 값으로 퀸을 이동
+	public void moveQueenToSecondOptimal(int col){
+		System.out.println(col + "행에서 차선을 선택!!");
+		int minHeuristicRow = 0;
+		
+		// 각 row별 휴리스틱 총합값.
+		ArrayList <Integer> heuristic_per_row = new ArrayList<Integer>();
+		
+		for(int i = 0 ; i < board.size(); i++){
+			moveQueen(col, i);
+			heuristic_per_row.add(getHeuristicIndexSum());
+		}
+		
+		// 휴리스틱 값이 가장 최소가 되는 인덱스 탐색.
+		minHeuristicRow = heuristic_per_row.indexOf(Collections.min(heuristic_per_row));
+		
+		// 최소값을 무한대로 
+		heuristic_per_row.set(minHeuristicRow, Integer.MAX_VALUE);
+		
+		// 다시 최소 인덱스 탐색
+		minHeuristicRow = heuristic_per_row.indexOf(Collections.min(heuristic_per_row));
+		
+		// 해당 위치로 퀸을 이동.
+		moveQueen(col, minHeuristicRow);
+	}
+	
 	public void print(){
 		System.out.println("This is print method in State instance");
 		System.out.println("instance hash code -> " + instance.hashCode());
