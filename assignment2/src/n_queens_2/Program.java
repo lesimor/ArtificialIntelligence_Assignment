@@ -1,29 +1,58 @@
 package n_queens_2;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Random;
 
 public class Program {
 
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		State singletonState = State.getInstance();
-		singletonState.print();
+	public static void main(String[] args) throws FileNotFoundException {
+		// 인자로 받을 숫자.
+		int board_size;
 		
-		int board_size = 90;
+		// 인자로 받을 출력파일 경로.
+		String resultFilePath;
+		
+		// 예외처리 
+		try{
+			board_size = Integer.parseInt(args[0]);
+			resultFilePath = args[1] + "/result"+board_size+".txt";
+	    }catch(ArrayIndexOutOfBoundsException e){
+	    	board_size = 30;
+	    	resultFilePath = "./result" + board_size + ".txt";
+	    }
+		
+		
+		// 파일 설정.
+		File file = new File(resultFilePath);
+		PrintStream printStream = new PrintStream(new FileOutputStream(file));
+		
+		// standard out과 err을 file로 변경
+		System.setOut(printStream);
+		System.setErr(printStream);
+
+		// 싱글턴 패턴으로 설계한 State 클래스 인스턴스 생
+		State singletonState = State.getInstance();
+		
 		
 		singletonState.setSize(board_size);
 		
-		singletonState.showBoard();
-		
-		System.out.println("---------");
 		int target_col = 0;
 		int current_queen_row, optimal_row;
 		
 		// 보드의 스냅샷 비교를 위한 변수.
 		ArrayList<Integer> old_snapshot = new ArrayList<Integer>();
 		ArrayList<Integer> new_snapshot = new ArrayList<Integer>();
-		System.out.println(new_snapshot.size());
+//		System.out.println(new_snapshot.size());
+		
+		
+		System.out.println(">Hill climbing");
+		
+		// 시간측정 시작.
+		long startTime = System.currentTimeMillis();
 		while(true) {
 			current_queen_row = singletonState.getQueenRow(target_col);
 			optimal_row = singletonState.moveQueenByLocalSearch(target_col);
@@ -64,11 +93,23 @@ public class Program {
 			
 		}
 		
+		// 퀸 위치 출력
+		singletonState.printQueenPosition();
+		
+		// 시간측정 끝.
+		long stopTime = System.currentTimeMillis();
+		
+		// 경과시간.
+		long collapsedTime = (stopTime - startTime);
+				
+		// 경과시간 출력.
+		System.out.println("Total Elapsed Time: " + collapsedTime + "ms");
+		
 //		singletonState.moveQueen(2, 1);
 		
-		singletonState.showBoard();
+//		singletonState.showBoard();
 		
-		System.out.println("휴리스틱 인덱스 총합은 " + singletonState.getHeuristicIndexSum());
+//		System.out.println("휴리스틱 인덱스 총합은 " + singletonState.getHeuristicIndexSum());
 	}
 	
 	public static  boolean equalArrayLists(ArrayList<Integer> a, ArrayList<Integer> b){     

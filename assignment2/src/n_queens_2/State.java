@@ -20,9 +20,7 @@ public class State {
 	// State객체 생성자 함수
 	// 구조상 프로그램 전체에서 한번밖에 호출 안된다.
 	// 즉 인스턴스도 하나밖에 없다.
-	private State(){
-		System.out.println("call State constructor");
-	}
+	private State(){}
 	
 	public static State getInstance(){
 		return instance;
@@ -170,7 +168,6 @@ public class State {
 	
 	// 특정 열에서 최선의 값이 아닌 차선의 값으로 퀸을 이동
 	public void moveQueenToSecondOptimal(int col){
-		System.out.println(col + "행에서 차선을 선택!!");
 		int minHeuristicRow = 0;
 		
 		// 각 row별 휴리스틱 총합값.
@@ -192,6 +189,15 @@ public class State {
 		
 		// 해당 위치로 퀸을 이동.
 		moveQueen(col, minHeuristicRow);
+	}
+	
+	public void printQueenPosition(){
+		int col_size = board.size();
+//		System.out.println("col_size = " + col_size);
+		for(int i = 0 ; i < col_size ; i++){
+			System.out.print(board.get(i).indexOf(true) + " ");
+		}
+		System.out.println("");
 	}
 	
 	public void print(){
