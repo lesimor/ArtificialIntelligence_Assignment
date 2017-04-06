@@ -58,6 +58,8 @@ public class State {
 		
 	}
 	
+	// 현재 보드의 상태를 출력.
+	// 디버깅용으로 사용.
 	public void showBoard(){
 		for(int i = 0 ; i < this.board.get(0).size() ; i++){
 			for(int j = 0 ; j < this.board.size() ; j++){
@@ -109,17 +111,21 @@ public class State {
 				continue;
 			}
 		}
+		
+		// 충돌하는 퀸의 총 갯수를 반환.
 		return heuristic_index;
 	}
 	
-	// 인자로 들어온 행값과 열값으로 퀸을 이동시킨 후 보드 위에 잇는 모든 퀸의 휴리스틱 인덱스를 다 합친 
+	// 인자로 들어온 행값과 열값으로 퀸을 이동시킨 후 보드 위에 잇는 모든 퀸의 휴리스틱 인덱스를 다 합친 총합. 
 	// 이게 0이면 gaol에 도달한 것.
 	public int getHeuristicIndexSum(){
-		
+		// 탐색하고자 하는 위치의 행과 열값.
 		int queen_col, queen_row;
+		// 전체 휴리스틱 값을 담을 변
 		int heuristic_sum = 0;
 		for(queen_col = 0; queen_col < board.size(); queen_col++){
 			queen_row = board.get(queen_col).indexOf(true);
+			// 해당 위치의 퀸의 휴리스틱 값을 더한다.
 			heuristic_sum += getHeuristicIndexPerColumn(queen_col, queen_row);
 		}
 		return heuristic_sum;
@@ -174,7 +180,10 @@ public class State {
 		ArrayList <Integer> heuristic_per_row = new ArrayList<Integer>();
 		
 		for(int i = 0 ; i < board.size(); i++){
+			// 해당 위치로 퀸을 이동시켜보고.
 			moveQueen(col, i);
+			
+			// 각 위치에 이동시킬때마다의 휴리스틱 총합을 리스트에 추가.
 			heuristic_per_row.add(getHeuristicIndexSum());
 		}
 		
@@ -185,24 +194,20 @@ public class State {
 		heuristic_per_row.set(minHeuristicRow, Integer.MAX_VALUE);
 		
 		// 다시 최소 인덱스 탐색
+		// 차선이 선택된다.
 		minHeuristicRow = heuristic_per_row.indexOf(Collections.min(heuristic_per_row));
 		
 		// 해당 위치로 퀸을 이동.
 		moveQueen(col, minHeuristicRow);
 	}
 	
+	// 각 열의 퀸 위치 인덱스를 출력하는 함수.
 	public void printQueenPosition(){
 		int col_size = board.size();
-//		System.out.println("col_size = " + col_size);
 		for(int i = 0 ; i < col_size ; i++){
 			System.out.print(board.get(i).indexOf(true) + " ");
 		}
+		// 개행.
 		System.out.println("");
-	}
-	
-	public void print(){
-		System.out.println("This is print method in State instance");
-		System.out.println("instance hash code -> " + instance.hashCode());
-		System.out.println("Heuristic index is " + instance.heuristic_index);
 	}
 }
