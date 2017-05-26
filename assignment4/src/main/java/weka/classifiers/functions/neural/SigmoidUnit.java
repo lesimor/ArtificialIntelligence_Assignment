@@ -53,15 +53,26 @@ public class SigmoidUnit
      
     //this I got from the Neural Network faq to combat overflow
     //pretty simple solution really :)
-    if (value < -45) {
-      value = 0;
+    
+    // activation function을 sigmoid에서 relu로 변경.
+    // value가 0보다 작은 경우 무조건 0, 0보다 큰 경우는 해당 값을 value로 설정. 
+    value = Math.max(0.0, value);
+    
+    // value가 1보다 크다면.
+    if (value > 1){
+    	// value를 1로 설정.
+    	value = 1;
     }
-    else if (value > 45) {
-      value = 1;
-    }
-    else {
-      value = 1 / (1 + Math.exp(-value));
-    }  
+    
+//    if (value < -45) {
+//      value = 0;
+//    }
+//    else if (value > 45) {
+//      value = 1;
+//    }
+//    else {
+//      value = 1 / (1 + Math.exp(-value));
+//    }  
     return value;
   }
   
