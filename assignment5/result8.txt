@@ -1,0 +1,3 @@
+>Genetic Algorithm
+Total Elapsed Time: 2598ms
+4 6 3 0 2 7 5 1 
