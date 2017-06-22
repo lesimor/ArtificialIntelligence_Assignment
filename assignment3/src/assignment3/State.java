@@ -27,19 +27,20 @@ public class State {
 			col_list.add(new Col(_size, i, -1));
 		}
 		// 자신의 depth이후의 모든 Col 인스턴스에 대해 도메인을 업데이트.
-		for(int i = this.depth + 1 ; i < this.col_list.size(); i++){
-			this.update_col_domain(i);
-		}
+//		for(int i = this.depth + 1 ; i < this.col_list.size(); i++){
+//			this.update_col_domain(i);
+//		}
 	}
 	
-	State(State parent, int _assgined){
+	State(State _parent, int _assgined){
+		this.parent = _parent;
 		this.col_list = new ArrayList<Col>();
 		System.out.println("자식 state 생성.");
-		this.depth = parent.depth + 1;
-		this.size = parent.size;
+		this.depth = _parent.depth + 1;
+		this.size = _parent.size;
 		this.assigned = _assgined;
 		// parent 노드에서 받은 col_list를 받아옴.
-		this.col_list.addAll(parent.col_list);
+		this.col_list.addAll(_parent.col_list);
 		// state에 해당하는 깊이 index에 위치한 col_list의 Col인스턴스 assigned값을 갱신.
 		this.col_list.get(this.depth).assigned = _assgined;
 		
@@ -47,13 +48,15 @@ public class State {
 		this.printInfo();
 		
 		// 자신의 depth이후의 모든 Col 인스턴스에 대해 도메인을 업데이트.
-		for(int i = this.depth + 1 ; i < this.col_list.size(); i++){
-			this.update_col_domain(i);
-		}
+//		for(int i = this.depth + 1 ; i < this.col_list.size(); i++){
+//			this.update_col_domain(i);
+//		}
 		System.out.println("도메인 업데이트 이후 .");
 		this.printInfo();
 		
 	}
+	
+
 	
 	// expand가능한지 알아보고 안되는 경우 null반환
 	// 불가능한 경우 1.도메인이 공집합인 변수가 발생
@@ -62,24 +65,30 @@ public class State {
 		return this.col_list.get(this.depth + 1).domain;
 	}
 	
-	public void update_col_domain(int i){
-		Col destination = this.col_list.get(i);
-		// source에 할당된 값을 이용하여 destination의 도메인을 갱신. 
-		// C = {i!=j, |Xi - Xj| != |i - j|
-		int source_index = this.depth;
-		int source_assigned = this.assigned;
-		
-		int destination_index = destination.depth;
-		
-		Iterator<Integer> iter = destination.domain.iterator();
-		int index = 0;
-		while(iter.hasNext()){
-			int loc = iter.next().intValue();
-			if(source_assigned == loc || Math.abs(source_index - destination_index) == Math.abs(source_assigned - loc)){
-				iter.remove();
+	public void update_col_domain(){
+		ArrayList<Col> tmp_col_list = (ArrayList<Col>) this.col_list.clone();
+		int this_depth = this.depth;
+		int this_assigend = this.assigned;
+		for(int i = this_depth + 1 ; i < tmp_col_list.size(); i++){
+			Col destination = tmp_col_list.get(i);
+			// source에 할당된 값을 이용하여 destination의 도메인을 갱신. 
+			// C = {i!=j, |Xi - Xj| != |i - j|
+			int source_index = this_depth;
+			int source_assigned = this_assigend;
+			
+			int destination_index = destination.depth;
+			
+			Iterator<Integer> iter = destination.domain.iterator();
+			int index = 0;
+			while(iter.hasNext()){
+				int loc = iter.next().intValue();
+				if(source_assigned == loc || Math.abs(source_index - destination_index) == Math.abs(source_assigned - loc)){
+					iter.remove();
+				}
 			}
 		}
-		
+		this.col_list.clear();
+		this.col_list.addAll(tmp_col_list);
 	}
 	
 	public Boolean isGoalState(){

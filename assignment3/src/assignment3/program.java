@@ -16,7 +16,9 @@ public class program {
 		Stack<State> st = new Stack();
 		
 		for(int i = 0 ; i < map_size; i++){
-			st.push(new State(map_size,i));
+			State new_s = new State(map_size,i);
+			new_s.update_col_domain();
+			st.push(new_s);
 		}
 		
 		State current_state = st.pop();
@@ -38,14 +40,17 @@ public class program {
 			
 			
 			for(int i = 0 ; i < successor_locations.size() ; i++){
-				int successor_location = successor_locations.get(i);
+				int successor_location = successor_locations.get(i).intValue();
 				System.out.println(successor_location + "expand!");
 				System.out.println("-----");
 				System.out.println("부모 state 상태");
 				current_state.printInfo();
 				System.out.println("-----");
-				
-				st.push(new State(current_state, successor_location));
+				State new_s = new State(current_state, successor_location);
+
+				// 여기서 current_state의 col_list가 바뀜..ㅠㅠ.
+				new_s.update_col_domain();
+				st.push(new_s);
 				System.out.println("푸시");
 			}
 			System.out.println("===================");
